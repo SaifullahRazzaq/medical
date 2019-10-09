@@ -1,18 +1,21 @@
 import React,{Component} from 'react';
 import '../App.css';
 import {Registerfun} from '../Config/Firebase';
-class Admin extends Component{
-constructor(){
-    super()
-    
-    this.state=
-    {
+import Swal from 'sweetalert2';
 
-        email:'',
-        password:''
+class Admin extends Component{
+    constructor(){
+        super()
         
-    }
-    this.handleChange = this.handleChange.bind(this)
+        this.state=
+        {
+            
+            email:'',
+            password:''
+            
+        }
+        this.handleChange = this.handleChange.bind(this)
+        const Swal = require('sweetalert2')
 }
 
 
@@ -26,7 +29,22 @@ async Signin()
 {
     const {email,password}=this.state;
     await Registerfun(email,password)
-    return this.props.history.push('/AdminScreen');
+    Swal.fire({
+        title: 'Success!',
+        text: 'Login Successfully',
+        type: 'success',
+        confirmButtonText: 'Cool'
+      }).then(()=>{
+
+          return this.props.history.push('/AdminScreen');
+      }).catch(()=>{
+        Swal.fire({
+            title:"Something Went Wrong Try again",
+            text: 'Login Error',
+            type: 'Error',
+            confirmButtonText: 'Cool'
+          })
+      })
 
 
 }
@@ -47,6 +65,7 @@ render()
        
  
 <div className="Admin" style={{paddingLeft:250}}>
+    <img src={require('../asset/admin.jpg')} width="200" height="200"  style={{marginLeft:320}}/><br/><br/>/>
 <main class="login-form">
     <div class="cotainer">
         <div class="row justify-content-center">

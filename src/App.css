@@ -208,8 +208,14 @@ padding-left: 400px;
   }
 .Admin
   {
-    padding-top: 150px;
+    padding-top: 20px;
 
+  }
+
+.Img
+  {
+    float: left;
+    text-align: start;
   }
 
 

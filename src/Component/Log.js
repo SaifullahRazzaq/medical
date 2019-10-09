@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import '../App.css'
 import Swal from 'sweetalert2';
-import { Registerfun } from '../Config/Firebase'
+import { Loginfun } from '../Config/Firebase'
 
-class Register extends Component {
+class Log extends Component {
 
     constructor() {
         super();
@@ -16,7 +15,7 @@ class Register extends Component {
 
             }
         this.handleChange = this.handleChange.bind(this)
-        this.Register=this.Register.bind(this);
+        this.Login=this.Login.bind(this);
     }
 
     handleChange(e) {
@@ -24,11 +23,11 @@ class Register extends Component {
 
     }
 
-    async Register() {
+    async Login() {
         const { email, password } = this.state
 
         try {
-            await Registerfun(email, password)
+            await Loginfun(email, password)
             Swal.fire({
                 title: 'Success!',
                 text: 'Register Successfully',
@@ -36,7 +35,7 @@ class Register extends Component {
                 confirmButtonText: 'Awesome'
              
             })
-            this.props.history.push('/Log')
+            this.props.history.push('/Login')
 
 
 
@@ -70,7 +69,7 @@ class Register extends Component {
      
 
 <div className="Admin" style={{paddingLeft:250}}>
-    <img src={require('../asset/User.png')} width="200" height="200"  style={{marginLeft:320}}/><br/><br/>
+    <img src={require('../asset/User.png')} width="200" height="200"  style={{marginLeft:300}}/><br/><br/>
 <main class="login-form">
   <div class="cotainer">
       <div class="row justify-content-center">
@@ -95,8 +94,8 @@ class Register extends Component {
 
 
                           <div class="col-md-10 offset-md-4 text-right">
-                              <button type="button" class="btn btn-primary" onClick={() => {this.Register()}}>
-                                  Register
+                              <button type="button" class="btn btn-primary" onClick={this.Login}>
+                                  Login
               </button>
                           </div>
                       </form>
@@ -120,4 +119,4 @@ class Register extends Component {
 
 
 }
-export default Register;
+export default Log;

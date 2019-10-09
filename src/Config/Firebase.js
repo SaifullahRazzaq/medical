@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import 'firebase/storage';
 import { userInfo } from 'os';
@@ -13,93 +13,90 @@ var firebaseConfig = {
     messagingSenderId: "603411143845",
     appId: "1:603411143845:web:888a18c286ec8c3641c14c",
     measurementId: "G-L27051DCMZ"
-  };
+};
 
 
 
 
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  var storage = firebase.storage();
-  var database=firebase.database();
-  var db=firebase.firestore();
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+var storage = firebase.storage();
+var database = firebase.database();
+var db = firebase.firestore();
 
 
-  function UploadImage(img,RightMedial,RightLiteral,LeftLiteral,LeftMedial)
-  {
-let storageRef = firebase.storage().ref().child(`userimages/${img.name}`)
-  storageRef.put(img)
-  .then((snapshot) => {
-      snapshot.ref.getDownloadURL().then((sanpUrl) => {
-          //url yahan se milega sanpurl
-          var imageurl=sanpUrl;
-          console.log(sanpUrl)
-     var Image =
-     {
-          imageurl,
-          RightLiteral,
-        RightMedial,
-        LeftMedial,
-        LeftLiteral
-    }
-    var key=firebase.database().ref('Admin/').push(Image).key;
-      console.log("successs========>",key)
-     
-      })
-  }) 
-  
-  }
+function UploadImage(img, RightMedial, RightLiteral, LeftLiteral, LeftMedial,ImageName,Description) {
+    let storageRef = firebase.storage().ref().child(`userimages/${img.name}`)
+    storageRef.put(img)
+        .then((snapshot) => {
+            snapshot.ref.getDownloadURL().then((sanpUrl) => {
+                //url yahan se milega sanpurl
+                var imageurl = sanpUrl;
+                console.log(sanpUrl)
+                var Image =
+                {
+                    imageurl,
+                    RightLiteral,
+                    RightMedial,
+                    LeftMedial,
+                    LeftLiteral,
+                    ImageName,
+                    Description
+                }
+                var key = firebase.database().ref('Admin/').push(Image).key;
+                console.log("successs========>", key)
+
+            })
+        })
+
+}
 
 
-  function Registerfun(email,password)
-  {
-   
-    firebase.auth().createUserWithEmailAndPassword(email,password).then((user=>{
-        console.log("user=========>",user)
-          
-      
+function Registerfun(email, password) {
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).then((user => {
+        console.log("user=========>", user)
+
+
     }))
-            }
+}
 
-function savedata(email,password,img)
-{
+function savedata(email, password, img) {
     console.log("firebase wala chala")
-    var userobject={
+    var userobject = {
         email,
         password,
         img
-       }
-    try {
-        var key=firebase.database().ref('Userinfo/').push(userobject).key;
-        console.log("message=========>",key);
-     
-    } catch (error) {
-    console.log(error.message)    
     }
-           
-           
-           
-       
-      
+    try {
+        var key = firebase.database().ref('Userinfo/').push(userobject).key;
+        console.log("message=========>", key);
+
+    } catch (error) {
+        console.log(error.message)
+    }
+
+
+
+
+
 }
 
 
-function Loginfun(email,password)
-{
-    firebase.auth().signInWithEmailAndPassword(email,password).then((userinfo=>{
-        console.log("userinfo=========>",userinfo)
+function Loginfun(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password).then((userinfo => {
+        console.log("userinfo=========>", userinfo)
     }))
 }
-function getAllImages()
-{
+function getAllImages() {
 
 }
 
-  export {
-      Registerfun,
-      Loginfun,
-      getAllImages,
-      storage,
-      firebase,
-      UploadImage
-    }
+export {
+    Registerfun,
+    Loginfun,
+    getAllImages,
+    storage,
+    firebase,
+    UploadImage
+}

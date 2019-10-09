@@ -16,7 +16,8 @@
     "react-signup-login-component": "^1.2.0",
     "react-strap": "0.0.1",
     "reactstrap": "^8.0.1",
-    "sweetalert-react": "^0.4.11"
+    "sweetalert-react": "^0.4.11",
+    "sweetalert2": "^8.18.1"
   },
   "scripts": {
     "start": "react-scripts start",

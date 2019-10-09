@@ -3,7 +3,7 @@ import '../App.css'
 import { firebase } from '../Config/Firebase';
 import { Card } from 'antd';
 import { Checkbox } from 'antd';
-import { Button } from 'antd/lib/radio';
+
 
 
 
@@ -19,51 +19,89 @@ class Mainscreen extends Component {
                 show: true,
                 Image: [],
                 count: 0,
+                checkedboxes: 0,
                 checkbox: false,
                 Value: [],
-                key:[],
+                EvaluationList: [],
+                currentImageName: '',
+                currentDescription: '',
+                cureentLeftLiteral: '',
+                currentLeftMedial: '',
+                currentRightLiteral: '',
+                currentRightMedial: '',
+                imageurl: '',
+
+
 
 
             }
         this.handleChange = this.handleChange.bind(this)
         this.updateObject = this.updateObject.bind(this);
-        this.logout=this.logout.bind(this);
+        this.logout = this.logout.bind(this);
+        this.mapData = this.mapData.bind(this);
     }
-
-
 
 
 
     componentDidMount() {
-       
+        const getdata = [];
+        firebase.database().ref('Admin').once("value", (data) => {
+            var Evaluationdata = data.val();
+            for (var key in Evaluationdata) {
+
+                getdata.push(Evaluationdata[key])
+            }
+
+        }).then(() => {
+
+            this.setState({ EvaluationList: getdata })
+            const { count, EvaluationList } = this.state
+            if (this.state.EvaluationList.length > 0) {
+                var Name = EvaluationList[count].ImageName
+                var description = EvaluationList[count].Description
+                var Lliteral = EvaluationList[count].LeftLiteral
+                var lMedial = EvaluationList[count].LeftMedial
+                var Rliteral = EvaluationList[count].RightLiteral
+                var RMedial = EvaluationList[count].RightMedial
+                var url = EvaluationList[count].imageurl
+
+
+                this.setState({
+                    currentImageName: Name,
+                    currentDescription: description,
+                    cureentLeftLiteral: Lliteral,
+                    currentLeftMedial: lMedial,
+                    currentRightLiteral: Rliteral,
+                    currentRightMedial: RMedial,
+                    imageurl: url
+                })
+
+            }
+            else {
+                console.log("error")
+            }
+
+
+        })
 
     }
 
-    logout()
-    {
-        firebase.auth().signOut().then(function() {
+    logout() {
+        firebase.auth().signOut().then(function () {
             console.log('Signed Out');
-          }, function(error) {
+        }, function (error) {
             console.error('Sign Out Error', error);
-          });
+        });
 
 
 
     }
     Check(e, object) {
         // let checkbox=e.target.checked;
-        e.target.checked ? this.setState({ count: this.state.count + 1 }) : this.setState({ count: this.state.count - 1 })
-
-        //  if(this.state.count==20)
+        e.target.checked ? this.setState({ checkedboxes: this.state.checkedboxes + 1 }) : this.setState({ checkedboxes: this.state.checkedboxes - 1 })
         this.setState({ Value: this.state.Value.concat(object) });
-        //  {
 
-        //      document.getElementById('btn').style.display='block';
-        //  } 
-        //  else
-        //  {
-        //      document.getElementById("btn").style.display='none';
-        //  }
+    
 
     }
 
@@ -72,33 +110,79 @@ class Mainscreen extends Component {
 
     }
 
+    mapData() {
+ console.log("count====>",this.state.count)
+        const { EvaluationList, count } = this.state;
+        console.log("EvaluationList", EvaluationList)
+        if (this.state.EvaluationList.length > count) {
+            var Name = EvaluationList[count].ImageName
+            var description = EvaluationList[count].Description
+            var Lliteral = EvaluationList[count].LeftLiteral
+            var lMedial = EvaluationList[count].LeftMedial
+            var Rliteral = EvaluationList[count].RightLiteral
+            var RMedial = EvaluationList[count].RightMedial
+            var url = EvaluationList[count].imageurl
+
+            console.log("Name=======>", Name)
+            console.log(" description=======>", description)
+            console.log(" Lliteral=======>", Lliteral)
+            console.log("Rliteral=======>", Rliteral)
+            console.log(" RightMedial=======>", RMedial)
+            console.log("url===========>", url)
+
+
+            this.setState({
+                currentImageName: Name,
+                currentDescription: description,
+                cureentLeftLiteral: Lliteral,
+                currentLeftMedial: lMedial,
+                currentRightLiteral: Rliteral,
+                currentRightMedial: RMedial,
+                imageurl: url
+            })
+            this.setState({
+                count: this.state.count + 1,
+                checkedboxes:false,
+                checkbox:' '
+
+            })
+        }
+        else {
+            console.log("error")
+        }
+
+
+
+    }
+
+
     updateObject() {
-    const {Value}=this.state;
-    let user=firebase.auth().currentUser.uid;
-    firebase.database().ref('Admin/'+user).set(Value).then((success)=>{
-console.log("success========>",success)
-    }).catch((err)=>{
-        console.log(err)
-    })
-    //   var objectData=[];
-    //     let object=data.val();
-    //     for(var key in object)
-    //     {
-    //         console.log("Object wala data ayaaa=====>",object[key])
-        
-    //     }
-    //     objectData.push(object[key])
+        const { Value } = this.state;
+        let user = firebase.auth().currentUser.uid;
+        firebase.database().ref('Admin/' + user).set(Value).then((success) => {
+            console.log("success========>", success)
+        }).catch((err) => {
+            console.log(err)
+        })
+        //   var objectData=[];
+        //     let object=data.val();
+        //     for(var key in object)
+        //     {
+        //         console.log("Object wala data ayaaa=====>",object[key])
+
+        //     }
+        //     objectData.push(object[key])
 
 
 
-    //     console.log("objectdata===========>",objectData)
-    //     this.setState({key:this.state.key.concat(object[key])})
-    //     console.log("key===========>",this.state.key)
-    
-    
-    
-    
-    // })
+        //     console.log("objectdata===========>",objectData)
+        //     this.setState({key:this.state.key.concat(object[key])})
+        //     console.log("key===========>",this.state.key)
+
+
+
+
+        // })
 
 
 
@@ -106,38 +190,49 @@ console.log("success========>",success)
 
 
     render() {
-        const { Image, count, Value } = this.state;
-       return (
+        const { imageurl, cureentLeftLiteral, currentDescription, currentImageName, currentLeftMedial, currentRightMedial, currentRightLiteral } = this.state;
+
+        return (
+
+
             <div>
 
-                <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
-                    <div class="container">
-                        <img src={require('../asset/Capture.PNG')} style={{ width: 100, height: 80 }} />
-                        <a className="navbar-brand" href="#">Hip And Knee Step By Step</a>
-
-                        <button className="navbar-toggler" onClick={this.logout}  type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon">Logout</span>
-                        </button>
-
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-
-
+                <nav className="navbar navbar-inverse">
+                    <div className="container-fluid">
+                        <div className="navbar-header">
+                            <a className="navbar-brand" href="#">Hip And Knee Step by Step</a>
+                            <div style={{ float: "right", flex: 1, fontSize: 12 }}>
+                                <a className="navbar-brand" href="#" onClick={this.logout} style={{ float: "right", flex: 1, fontSize: 12 }}>>Logout</a>
+                            </div>
                         </div>
+
                     </div>
                 </nav>
 
-                <Meta title="X-Ray Evaluation" description="X-ray Name: 4875038 1X1.jpg" />
-                <Card className="card"
-                    hoverable
-                    cover={<img src={Image[count]} />}>
-                    {/* <button onClick={}>Next</button>  */}
-                </Card>
 
 
 
-                <div class="table-responsive text-nowrap">
+                <div>
+                    <p style={{ float: "left", flex: 1, fontSize: 12 }}>ImageName:   {currentImageName}</p>
+                </div>
 
-                    <table class="table">
+                <div style={{ float: "Right", flex: 1, fontSize: 12 }} >
+                    <p >Description:   {currentDescription}</p>
+                </div>
+                <center>
+                    <Card
+                        hoverable
+                        style={{ width: 200 }}
+                        cover={<img alt="example" src={imageurl} />}
+                        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                    </Card>
+                </center>
+
+
+
+                <div className="table-responsive text-nowrap">
+
+                    <table className="table">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -190,12 +285,16 @@ console.log("success========>",success)
                                 <td><Checkbox onChange={(e) => { this.Check(e, { column: 'right Materal', row: 'Replace' }) }}></Checkbox></td>
                             </tr>
 
-                            <button id="btn" onClick={this.updateObject} disabled={this.state.count < 20 ? true : false}>Next</button>
 
                         </tbody>
                     </table>
-
+                    <button id="btn"
+                        className="btn btn-primary"
+                        onClick={this.mapData}
+                        disabled={this.state.checkedboxes < 4 ? true : false}>Next</button>
                 </div>
+
+
 
 
 
